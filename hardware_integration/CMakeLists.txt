@@ -216,7 +216,7 @@ endif()
 if("MacCANPCAN" IN_LIST CAN_DRIVER)
   target_link_libraries(
     HardwareIntegration
-    PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/Mac/libPCBUSB.0.12.dylib)
+    PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/Mac/libPCBUSB.0.13.dylib)
 endif()
 
 if("TouCAN" IN_LIST CAN_DRIVER)
