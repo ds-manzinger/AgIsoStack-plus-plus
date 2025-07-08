@@ -55,7 +55,7 @@
  */
 
 #ifdef __APPLE__
-#include <MacTypes.h>                   // To map Windows integer types
+        #include <MacTypes.h>            // To map Windows integer types
 #endif
 
 /*  -----------  defines  ------------------------------------------------

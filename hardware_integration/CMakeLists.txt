@@ -12,7 +12,8 @@ if(NOT CAN_DRIVER)
   else()
     set(CAN_DRIVER "SocketCAN")
   endif()
-
+  list(APPEND CAN_DRIVER "SerialCAN")
+  
   message(
     AUTHOR_WARNING
       "No CAN driver specified, choosing ${CAN_DRIVER} by default. Set the CAN_DRIVER variable with -DCAN_DRIVER=<driver> to specify another driver. or -DCAN_DRIVER=\"<driver1>;<driver2>\" to specify multiple drivers."
@@ -103,6 +104,15 @@ endif()
 if("NTCAN" IN_LIST CAN_DRIVER)
   list(APPEND HARDWARE_INTEGRATION_SRC "ntcan_plugin.cpp")
   list(APPEND HARDWARE_INTEGRATION_INCLUDE "ntcan_plugin.hpp")
+endif()
+if("SerialCAN" IN_LIST CAN_DRIVER)
+  list(APPEND HARDWARE_INTEGRATION_SRC "serial_line_can_plugin.cpp")
+  list(APPEND HARDWARE_INTEGRATION_INCLUDE "serial_line_can_plugin.hpp")
+  list(APPEND HARDWARE_INTEGRATION_INCLUDE "SerialCAN.h")
+  list(APPEND HARDWARE_INTEGRATION_INCLUDE "SerialCAN_Defines.h")
+  list(APPEND HARDWARE_INTEGRATION_INCLUDE "CANBTR_Defaults.h")
+  list(APPEND HARDWARE_INTEGRATION_INCLUDE "CANAPI.h")
+
 endif()
 
 # Prepend the source directory path to all the source files
@@ -218,7 +228,12 @@ if("MacCANPCAN" IN_LIST CAN_DRIVER)
     HardwareIntegration
     PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/Mac/libPCBUSB.0.13.dylib)
 endif()
+if ("SerialCAN" IN_LIST CAN_DRIVER AND APPLE)
+    target_link_libraries(
+      HardwareIntegration
+      PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lib/Mac/libSerialCAN.0.3.dylib)
 
+endif()
 if("TouCAN" IN_LIST CAN_DRIVER)
   if(MSVC)
     # See https://gitlab.kitware.com/cmake/cmake/-/issues/15170
